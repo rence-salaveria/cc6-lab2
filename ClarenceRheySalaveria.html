@@ -1,0 +1,176 @@
+<!-- github link: -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Web Application</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Stick+No+Bills:wght@300&display=swap');
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .spacing {
+            height: 10px;
+        }
+
+        #result {
+            border: 3px solid #fff;
+            text-align: center;
+            width: 30%;
+        }
+
+        h1, h2 {
+            font-family: 'Stick No Bills', sans-serif;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            margin-top: 8%;
+            background-image: url("https://i.ibb.co/6ngGkPh/background.jpg");
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<h1 align="center">Sign up Form</h1>
+<div class="container">
+    <form id="SignUpForm" onsubmit="return stopRefresh();">
+        <label for="fullname">Full Name: </label>
+        <input type="text" id="fullname" name="fullname">
+        <br>
+        <div class="spacing"></div>
+
+        <label for="age">Age: </label>
+        <input type="number" id="age" name="age">
+        <br>
+        <div class="spacing"></div>
+
+        <label for="snum">Student Number: </label>
+        <input type="text" id="snum" name="snum">
+        <br>
+        <div class="spacing"></div>
+
+        <label for="gender">Gender: </label>
+        <input type="text" id="gender" name="gender">
+        <br>
+        <div class="spacing"></div>
+        
+        <label for="email">Email Address: </label>
+        <input type="text" id="email" name="email">
+        <br>
+    
+        <div class="spacing"></div>
+
+        <div class="spacing"></div>
+        <button type="submit" id="submit-btn">Sign Up</button>
+        <button type="reset" id="reset-btn">Reset form</button>
+    </form>
+    
+</div>
+<br>
+
+<div class="container">
+    <div class="heading">
+        <h1 align="center">Your Information</h1>
+    </div>
+</div>
+<div class="container">
+    <div id="result">
+        Full Name: <span id="result-name"></span><br>
+        Age: <span id="result-age"></span><br>
+        Year of Enrollment: <span id="result-year-info"></span><br>
+        Student Number: <span id="result-stud"></span><br>
+        Gender: <span id="result-gender"></span><br>
+        Email: <span id="result-email"></span><br>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /* entry code */
+    console.log("Welcome to the Sample Web Application");
+
+    /* inner HTML components */
+    let resultName = document.getElementById("result-name");
+    let resultAge = document.getElementById("result-age");
+    let resultYearInfo = document.getElementById("result-year-info");
+    let resultStudNum = document.getElementById("result-stud");
+    let resultGender = document.getElementById("result-gender");
+    let resultEmail = document.getElementById("result-email");
+    let resultPass = document.getElementById("result-pass");
+
+    /* variables */
+    const submitBtn = document.getElementById("submit-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    // get form element
+    const formElement = document.forms.SignUpForm;
+    let formData = null;
+
+    /* functions */
+    submitBtn.addEventListener("click", () => {
+        alert("You will now sign up.");
+        setData();
+    }); 
+
+    resetBtn.addEventListener("click", () => {
+        alert("Resetting form");
+        resetInformation();
+    })
+
+
+    /* This is to get the data, and show it to the targeted element's HTML */    
+    function setData() {
+        resetInformation();
+        formData = new FormData(formElement);
+        const name = formData.get("fullname");
+        const age = formData.get("age");
+        const snum = formData.get("snum");
+        const gender = formData.get("gender");
+        const email = formData.get("email");
+        /* == NEW: function call to extractYearInformation to get array of values == */
+        const yearInfo = extractYearInformation(snum);
+        resultName.innerHTML = name; 
+        resultAge.innerHTML = age;
+        /* == NEW: access array values == */
+        resultYearInfo.innerHTML = `20${yearInfo[0]}`;
+        resultStudNum.innerHTML = yearInfo[1];
+        resultGender.innerHTML = gender;
+        resultEmail.innerHTML = email;
+    }
+
+    /* This is to stop the page from refreshing after form submit */
+    function stopRefresh(){
+        return false;
+    }
+
+    /** == NEW: function to extract the batch number 'xx' and student number 'yyyy' in xx-yyyy == 
+     * param studentNumber: a string representing the student (consists of batch number and student number)
+     * return yearInfo: an array that contains the year and student number
+    */
+    function extractYearInformation(studentNumber) {
+        formData = new FormData(formElement);
+        const snum = formData.get("snum");
+        const yearInfo = snum.split("-");
+        return yearInfo;
+    }
+
+    /* == NEW: function to reset the box info below the form */
+    function resetInformation() {
+        resultName.innerHTML = ""; 
+        resultAge.innerHTML = "";
+        resultYearInfo.innerHTML = "";
+        resultStudNum.innerHTML = "";
+        resultGender.innerHTML = "";
+        resultEmail.innerHTML = "email";
+    }
+
+</script>
+</body>
+</html>
